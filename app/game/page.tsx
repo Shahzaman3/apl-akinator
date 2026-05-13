@@ -8,7 +8,6 @@ import { motion, AnimatePresence, useSpring, useTransform } from "framer-motion"
 
 import { AnswerType, Question, ReasoningLog } from "@/types";
 import { apiService } from "@/services/apiService";
-import { mockQuestions, INITIAL_POOL_SIZE, INITIAL_CONFIDENCE } from "@/data/mockData";
 import { appSession } from "@/lib/navigationState";
 
 function AnimatedCounter({ value }: { value: number }) {
@@ -25,19 +24,28 @@ function AnimatedCounter({ value }: { value: number }) {
 export default function GameScreen() {
   const router = useRouter();
 
-  // Enforce precise session reset exclusively on direct route reloads
-  useEffect(() => {
-    if (!appSession.isClientNavigated) {
-      router.replace("/");
-    }
-  }, [router]);
+
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState<Question>(mockQuestions[0]);
-  const [confidence, setConfidence] = useState(INITIAL_CONFIDENCE);
-  const [remainingPool, setRemainingPool] = useState(INITIAL_POOL_SIZE);
+  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
+  const [confidence, setConfidence] = useState(12);
+  const [remainingPool, setRemainingPool] = useState(150);
+  const [likelyCandidates, setLikelyCandidates] = useState<string[]>([]);
   const [logs, setLogs] = useState<ReasoningLog[]>([]);
   const [isThinking, setIsThinking] = useState(false);
+
+  useEffect(() => {
+    // Initialize direct game session from REST endpoint
+    const setupGame = async () => {
+      setIsThinking(true);
+      const data = await apiService.getInitialGame();
+      setCurrentQuestion(data.firstQuestion);
+      setRemainingPool(data.initialPool);
+      setConfidence(data.initialConfidence);
+      setIsThinking(false);
+    };
+    setupGame();
+  }, []);
 
   const handleAnswer = async (answerInput: string) => {
     if (isThinking) return;
@@ -70,8 +78,10 @@ export default function GameScreen() {
       });
     }, 700);
     
-    // Stage 3: Await integration service backend simulation
-    const response = await apiService.submitAnswer(currentIndex, answer, confidence, remainingPool);
+    if (!currentQuestion) return;
+
+    // Stage 3: Await active deduction from REST API backend
+    const response = await apiService.submitAnswer(currentQuestion.id, answer);
     clearTimeout(timer);
 
     if (!response.isComplete && response.nextQuestion) {
@@ -79,6 +89,9 @@ export default function GameScreen() {
       setCurrentQuestion(response.nextQuestion);
       setConfidence(response.confidence);
       setRemainingPool(response.remainingPool);
+      if (response.topCandidates) {
+        setLikelyCandidates(response.topCandidates);
+      }
       
       setLogs((prev) => {
         const pastLogs = prev.slice(1); // Remove intermediate processing log
@@ -179,6 +192,10 @@ export default function GameScreen() {
                         </p>
                       </div>
                     </motion.div>
+                  ) : !currentQuestion ? (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                    </div>
                   ) : (
                     <motion.div
                       key={`question-${currentQuestion.id}`}
@@ -196,15 +213,14 @@ export default function GameScreen() {
                         }}
                       ></div>
                       <div className="z-10 flex flex-col items-center gap-4 md:gap-lg max-w-2xl px-2 h-full justify-center">
-                      <motion.span
+                      <motion.div
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ delay: 0.2, duration: 0.4 }}
-                        className="material-symbols-outlined text-primary text-[40px] md:text-[48px]"
-                        style={{ fontVariationSettings: "'FILL' 1" }}
+                        className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-xl bg-primary/10 border-2 border-primary text-primary font-bold text-xl md:text-2xl shadow-[0_0_15px_rgba(26,115,232,0.2)] tracking-tight"
                       >
-                        help_center
-                      </motion.span>
+                        Q{currentIndex + 1}
+                      </motion.div>
                       <h2 className="font-headline-lg md:font-display-lg text-headline-lg md:text-display-lg text-on-surface leading-tight px-2">
                         {currentQuestion.text}
                       </h2>
@@ -343,18 +359,22 @@ export default function GameScreen() {
                   Likely Candidates
                 </h4>
                 <div className="flex flex-wrap gap-xs">
-                  <span className="px-2 py-1 bg-[#21262D] rounded font-label-sm text-label-sm text-on-surface">
-                    Player A
-                  </span>
-                  <span className="px-2 py-1 bg-[#21262D] rounded font-label-sm text-label-sm text-on-surface">
-                    Player B
-                  </span>
-                  <span className="px-2 py-1 bg-[#21262D] rounded font-label-sm text-label-sm text-on-surface">
-                    Player C
-                  </span>
-                  <span className="px-2 py-1 bg-[#21262D] rounded font-label-sm text-label-sm text-on-surface-variant">
-                    + <AnimatedCounter value={Math.max(0, remainingPool - 3)} /> more
-                  </span>
+                  {likelyCandidates.length > 0 ? (
+                    likelyCandidates.map((name, i) => (
+                      <span key={i} className="px-2 py-1 bg-[#21262D] rounded font-label-sm text-label-sm text-on-surface">
+                        {name}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="px-2 py-1 bg-[#21262D]/50 rounded font-label-sm text-label-sm text-on-surface-variant">
+                      Awaiting filters...
+                    </span>
+                  )}
+                  {likelyCandidates.length > 0 && remainingPool > likelyCandidates.length && (
+                    <span className="px-2 py-1 bg-[#21262D] rounded font-label-sm text-label-sm text-on-surface-variant">
+                      + <AnimatedCounter value={Math.max(0, remainingPool - likelyCandidates.length)} /> more
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

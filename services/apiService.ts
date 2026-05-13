@@ -1,83 +1,122 @@
-import { AnswerType, Question, ReasoningLog, PlayerProfile, AnswerResponse } from "../types";
-import { mockQuestions, mockPredictedProfile, INITIAL_POOL_SIZE, INITIAL_CONFIDENCE } from "../data/mockData";
+import { AnswerType, Question, PlayerProfile, AnswerResponse } from "../types";
 
-/**
- * Decoupled integration adapter handling simulated asynchronous interactions.
- * Fully structured to support simple replacement with active REST endpoints or Gemini AI streams.
- */
 export class ApiService {
-  /**
-   * Internal helper simulating network transport latency.
-   */
-  private async delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+  private currentGameId: string | null = null;
+
+  private setSessionId(id: string) {
+    this.currentGameId = id;
+    if (typeof window !== "undefined") {
+      localStorage.setItem("apl_game_id", id);
+    }
+  }
+
+  private getSessionId(): string | null {
+    if (this.currentGameId) return this.currentGameId;
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("apl_game_id");
+    }
+    return null;
   }
 
   /**
-   * Initializes session metrics and retrieves the opening deduction constraints.
+   * Starts game, initializes live session.
    */
   public async getInitialGame(): Promise<{ firstQuestion: Question; totalQuestions: number; initialPool: number; initialConfidence: number }> {
-    await this.delay(200);
-    return {
-      firstQuestion: mockQuestions[0],
-      totalQuestions: mockQuestions.length,
-      initialPool: INITIAL_POOL_SIZE,
-      initialConfidence: INITIAL_CONFIDENCE,
-    };
+    try {
+      const response = await fetch("/api/game/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) throw new Error("Engine start failure.");
+
+      const data = await response.json();
+      this.setSessionId(data.gameId);
+
+      return {
+        firstQuestion: {
+          id: data.question.id,
+          text: data.question.text,
+          subtitle: data.question.subtitle,
+        },
+        totalQuestions: 8, // Display static metric goal
+        initialPool: data.remainingPlayers,
+        initialConfidence: 12,
+      };
+    } catch (error) {
+      console.error("ApiService Error:", error);
+      // Absolute hardcoded fallback in event of emergency
+      return {
+        firstQuestion: { id: 1, text: "Is the player Indian?", subtitle: "Verify nationality." },
+        totalQuestions: 8,
+        initialPool: 150,
+        initialConfidence: 10,
+      };
+    }
   }
 
   /**
-   * Processes user selections to dynamically compute updated candidate dataset sizes and model certainty weights.
+   * Submits specific response to deduction router.
    */
   public async submitAnswer(
-    currentIndex: number,
-    answer: AnswerType,
-    currentConfidence: number,
-    currentPool: number
-  ): Promise<AnswerResponse> {
-    // Stage 1 delay (simulate calculation evaluation overhead)
-    await this.delay(700);
+    questionId: number,
+    answer: AnswerType
+  ): Promise<AnswerResponse & { topCandidates?: string[] }> {
+    try {
+      const gameId = this.getSessionId();
+      if (!gameId) throw new Error("Active session trace lost.");
 
-    const isLastQuestion = currentIndex >= mockQuestions.length - 1;
-    const nextQuestion = isLastQuestion ? null : mockQuestions[currentIndex + 1];
+      const response = await fetch("/api/game/answer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ gameId, questionId, answer }),
+      });
 
-    // Calculate new metrics statefully
-    const boost = Math.floor(Math.random() * 8) + 8;
-    const newConfidence = Math.min(98, currentConfidence + boost);
+      if (!response.ok) throw new Error("Telemetry split rejected.");
 
-    const factor = answer === "MAYBE" ? 0.8 : (0.4 + Math.random() * 0.2);
-    const newPool = Math.max(1, Math.floor(currentPool * factor));
-    const poolReduction = `Pool reduced to ${newPool}`;
+      const data = await response.json();
 
-    const currentQ = mockQuestions[currentIndex];
-    let filterText = `Filtered based on: ${currentQ.text.split(" ").slice(0, 4).join(" ")}...`;
-    if (answer === "NO") filterText = `Excluded players matching: ${currentQ.text.split(" ").slice(0, 3).join(" ")}...`;
-    if (answer === "MAYBE") filterText = `Applied soft weighting to: ${currentQ.text.split(" ").slice(0, 3).join(" ")}...`;
-
-    const newLog: ReasoningLog = {
-      filter: filterText,
-      reduction: poolReduction,
-      type: answer === "YES" ? "check_circle" : answer === "NO" ? "cancel" : "help",
-    };
-
-    // Stage 2 delay (simulate completion of payload transmission)
-    await this.delay(800);
-
-    return {
-      nextQuestion,
-      confidence: newConfidence,
-      remainingPool: newPool,
-      logs: [newLog],
-      isComplete: isLastQuestion,
-    };
+      return {
+        nextQuestion: data.nextQuestion
+          ? {
+              id: data.nextQuestion.id,
+              text: data.nextQuestion.text,
+              subtitle: data.nextQuestion.subtitle,
+            }
+          : null,
+        confidence: data.confidence,
+        remainingPool: data.remainingPlayers,
+        logs: data.logs,
+        isComplete: data.isComplete,
+        topCandidates: data.topPredictions.map((p: any) => p.name), // Used for live display rendering
+      } as any;
+    } catch (error) {
+      console.error("ApiService submit failure:", error);
+      throw error;
+    }
   }
 
   /**
-   * Simulates retrieval of the ultimate matched target payload profile.
+   * Retrives ultimate outcome mapping.
    */
-  public async getPredictionResult(_sessionId?: string): Promise<PlayerProfile> {
-    await this.delay(400); // Simulate database payload retrieval
-    return mockPredictedProfile;
+  public async getPredictionResult(): Promise<PlayerProfile> {
+    try {
+      const gameId = this.getSessionId();
+      if (!gameId) throw new Error("Resolution identity missing.");
+
+      const response = await fetch(`/api/game/result?gameId=${gameId}`);
+      if (!response.ok) throw new Error("Failed fetching intelligence bio.");
+
+      const data = await response.json();
+      // Flatten payload securely for complete backward compatibility with standard React state bindings
+      return {
+        ...data.prediction,
+        confidence: data.confidence,
+      } as PlayerProfile;
+    } catch (error) {
+      console.error("ApiService result retrieval failure:", error);
+      throw error;
+    }
   }
 }
 

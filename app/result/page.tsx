@@ -8,36 +8,35 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { PlayerProfile } from "@/types";
 import { apiService } from "@/services/apiService";
-import { mockPredictedProfile } from "@/data/mockData";
 import { appSession } from "@/lib/navigationState";
 
 export default function ResultScreen() {
   const router = useRouter();
 
-  // Enforce precise session reset exclusively on direct route reloads
-  useEffect(() => {
-    if (!appSession.isClientNavigated) {
-      router.replace("/");
-    }
-  }, [router]);
+
 
   const [isRevealed, setIsRevealed] = useState(false);
-  const [profile, setProfile] = useState<PlayerProfile>(mockPredictedProfile);
+  const [profile, setProfile] = useState<PlayerProfile | null>(null);
 
   useEffect(() => {
-    // Dynamic database lookup simulation
+    // Fetch actual deduction outcomes from REST endpoint
     const fetchPayload = async () => {
-      const data = await apiService.getPredictionResult();
-      setProfile(data);
+      try {
+        const data = await apiService.getPredictionResult();
+        setProfile(data);
+        
+        // Only schedule dramatic reveal AFTER payload successfully loads
+        setTimeout(() => {
+          setIsRevealed(true);
+        }, 1500);
+      } catch (e) {
+        console.error("Failed retrieving final intelligence bio:", e);
+        // Graceful dynamic redirection if session trace is invalid
+        router.replace("/");
+      }
     };
     fetchPayload();
-
-    // Simulate the dramatic reveal pause
-    const timer = setTimeout(() => {
-      setIsRevealed(true);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  }, [router]);
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -50,7 +49,7 @@ export default function ResultScreen() {
           <div className="w-full max-w-[1000px] flex flex-col gap-lg">
             
             <AnimatePresence mode="wait">
-              {!isRevealed ? (
+              {!isRevealed || !profile ? (
                 <motion.div
                   key="decrypting"
                   initial={{ opacity: 0 }}
@@ -105,7 +104,7 @@ export default function ResultScreen() {
                     </div>
                   </div>
                 </motion.div>
-              ) : (
+              ) : profile ? (
                 <motion.div
                   key="revealed"
                   initial={{ opacity: 0, y: 40 }}
@@ -295,7 +294,7 @@ export default function ResultScreen() {
                     </Link>
                   </motion.div>
                 </motion.div>
-              )}
+              ) : null}
             </AnimatePresence>
             
           </div>

@@ -105,7 +105,7 @@ export default function Home() {
               </h3>
             </div>
             <p className="font-body-sm text-on-surface-variant mt-sm">
-              Every inference updates the engine's internal certainty probability index before offering a definitive answer.
+              Every inference updates the engine&apos;s internal certainty probability index before offering a definitive answer.
             </p>
           </div>
         </section>

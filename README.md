@@ -101,7 +101,7 @@ The repository enforces clean separation of concerns, decoupling presentational 
 
 ## 🚀 Installation & Local Development
 
-Getting up and running locally is extremely straightforward. Ensure you have Node.js (v18+) installed.
+Getting up and running locally is extremely straightforward. Ensure you have Node.js (v18+) and a local MongoDB instance installed.
 
 ```bash
 # 1. Clone the repository
@@ -111,7 +111,16 @@ cd cricintel
 # 2. Install dependencies cleanly
 npm install
 
-# 3. Launch the high-fidelity local development engine
+# 3. Setup Environment Variables
+cp .env.example .env
+
+# Configure MONGODB_URI and GEMINI_API_KEY in .env
+
+# 4. Seed Initial Player Database
+# Run this via Curl or Postman to bootstrap the ~150+ players:
+curl -X POST http://localhost:3000/api/db/seed
+
+# 5. Launch the local development engine
 npm run dev
 ```
 
@@ -119,10 +128,23 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to experie
 
 ---
 
-## 🤝 Collaborative Workflow & Deployment
+## 🌍 Production Deployment & MongoDB Atlas Setup
 
-- **Deployment Readiness:** This repository features highly optimized framework configuration outputs, permitting single-click Vercel platform delivery without complex local build adjustments.
-- **Branching Strategy:** We highly recommend utilizing atomic component iterations inside isolated feature branches, leveraging our decoupled typings inside `types/index.ts` to coordinate simultaneous state expansions seamlessly.
+### 1. Database Configuration
+Create an account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas):
+1. Deploy a free `M0` cluster.
+2. Add a Database User and record the credentials.
+3. Whitelist `0.0.0.0/0` (or your hosting provider IPs) in the Network Access.
+4. Retrieve the Connection String (URI) replacing `<password>` with your user password and selecting database `apl`.
+
+### 2. Vercel Compatibility
+This project is fully optimized for Vercel:
+1. Link the repository in the Vercel Dashboard.
+2. Go to Environment Variables and supply:
+   - `MONGODB_URI` = `mongodb+srv://<user>:<pwd>@cluster.mongodb.net/apl`
+   - `GEMINI_API_KEY` = `AIzaSy...` (from Google AI Studio)
+3. Trigger deployment.
+4. After initial deployment completes, execute a one-time `POST` to your production URL at `https://your-app.vercel.app/api/db/seed` to populate production dataset candidates.
 
 ---
 <div align="center">
