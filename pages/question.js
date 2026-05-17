@@ -97,7 +97,7 @@ export default function Question() {
                   <div className="w-6 h-6 rounded-full bg-red-600 border-2 border-black flex-shrink-0 shadow-[inset_-2px_-2px_0_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform"></div>
                   <div className="flex items-baseline gap-2 text-left">
                     <span className="pixel-text-gold text-3xl">A.</span>
-                    <span className="text-white pixel-text text-2xl uppercase">Red Kookaburra</span>
+                    <span className="text-white pixel-text text-2xl uppercase">NO</span>
                   </div>
                 </button>
                 
@@ -106,7 +106,7 @@ export default function Question() {
                   <div className="w-6 h-6 rounded-full bg-gray-100 border-2 border-black flex-shrink-0 shadow-[inset_-2px_-2px_0_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform"></div>
                   <div className="flex items-baseline gap-2 text-left">
                     <span className="pixel-text-gold text-3xl">B.</span>
-                    <span className="text-white pixel-text text-2xl uppercase">White Dukes</span>
+                    <span className="text-white pixel-text text-2xl uppercase">YES</span>
                   </div>
                 </button>
                 
@@ -115,18 +115,18 @@ export default function Question() {
                   <div className="w-6 h-6 rounded-full bg-pink-500 border-2 border-black flex-shrink-0 shadow-[inset_-2px_-2px_0_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform"></div>
                   <div className="flex items-baseline gap-2 text-left">
                     <span className="pixel-text-gold text-3xl">C.</span>
-                    <span className="text-white pixel-text text-2xl uppercase">Pink S.G.</span>
+                    <span className="text-white pixel-text text-2xl uppercase">MAYBE</span>
                   </div>
                 </button>
                 
                 {/* Option D */}
                 <button className="btn-dark p-3 flex items-center gap-3 w-full rounded-sm group hover:bg-[#3a3a3a]">
-                  <div className="w-6 h-6 rounded-sm bg-gradient-to-br from-green-400 via-blue-500 to-purple-500 border-2 border-black flex-shrink-0 shadow-[inset_-2px_-2px_0_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform">
+                  <div className="w-6 h-6 rounded-full overflow-hidden bg-gradient-to-br from-green-400 via-blue-500 to-purple-500 border-2 border-black flex-shrink-0 shadow-[inset_-2px_-2px_0_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform">
                     <div className="w-full h-full opacity-50 bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,#fff_2px,#fff_4px)]"></div>
                   </div>
                   <div className="flex items-baseline gap-2 text-left">
                     <span className="pixel-text-gold text-3xl">D.</span>
-                    <span className="text-white pixel-text text-2xl uppercase">Other</span>
+                    <span className="text-white pixel-text text-2xl uppercase">DON'T KNOW</span>
                   </div>
                 </button>
               </div>
