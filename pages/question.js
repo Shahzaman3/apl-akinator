@@ -20,9 +20,9 @@ export default function Question() {
         <div className="absolute inset-0 z-0">
           {/* Using the provided image as the exact background */}
           <img 
-            alt="Pixel Art Cricket Stadium" 
+            alt="Poke-Cricket Masters Background" 
             className="w-full h-full object-cover select-none" 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlMi_iDJXFQky9-C3xvH6lbzgX6JtTEdwGy7uf46iBY5-sARZBlB5n_b3nPwcfNrOzbIPSMbU6ateY6NyMmHzi-dJM5gDom94l1WDwz0Zm6D3Nc6R4WK8HkXAGYCSsUhV3DH8uawLHTms6QzXVGMntVIr3EtZnN1lFLUBGibk2zdWIZnpIB2t_rwzvox91xwZkOB9MnkgRujKdnjBzGLOAJ9-v2IIbQxFldAj04R0wyjuma9puPZoOJYSNOyoK3eJ9OtKNSoEYJjs"
+            src="/hero-bg.jpeg"
           />
         </div>
         {/* END: Background Layer */}
@@ -61,7 +61,7 @@ export default function Question() {
             {/* Header Title */}
             <header className="text-center mb-6 mt-4 relative z-10 flex flex-col items-center">
               <Link href="/" className="hover:scale-105 transition-transform duration-200">
-                <h1 className="text-white pixel-text text-4xl md:text-5xl lg:text-6xl tracking-wider uppercase leading-tight cursor-pointer">
+                <h1 className="text-white pixel-text text-5xl md:text-6xl lg:text-7xl tracking-wider uppercase leading-tight cursor-pointer">
                   Quiz Time &amp; Player Stats
                 </h1>
               </Link>
@@ -76,7 +76,7 @@ export default function Question() {
                 {/* Lines */}
                 <div className="h-4 border-y-4 border-black w-full absolute top-1/2 -translate-y-1/2 bg-gray-400/50"></div>
                 {/* Title text over lines */}
-                <h2 className="pixel-text-gold text-2xl md:text-3xl px-4 relative z-10 bg-[#3a443a] border-4 border-black rounded-sm shadow-[inset_0_0_0_2px_#555]">
+                <h2 className="pixel-text-gold text-3xl md:text-4xl px-4 relative z-10 bg-[#3a443a] border-4 border-black rounded-sm shadow-[inset_0_0_0_2px_#555]">
                   QUESTION OF THE MATCH:
                 </h2>
                 {/* Pokeball right */}
@@ -85,7 +85,7 @@ export default function Question() {
               
               {/* Question Box */}
               <div className="w-[90%] bg-[#2a302a] border-4 border-black p-4 mb-8 text-center shadow-[inset_0_0_0_2px_#4a544a] rounded-sm">
-                <p className="text-white pixel-text text-xl md:text-2xl uppercase tracking-wide">
+                <p className="text-white pixel-text text-2xl md:text-3xl uppercase tracking-wide">
                   Which type of ball was used?
                 </p>
               </div>
@@ -96,8 +96,8 @@ export default function Question() {
                 <button className="btn-dark p-3 flex items-center gap-3 w-full rounded-sm group hover:bg-[#3a3a3a]">
                   <div className="w-6 h-6 rounded-full bg-red-600 border-2 border-black flex-shrink-0 shadow-[inset_-2px_-2px_0_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform"></div>
                   <div className="flex items-baseline gap-2 text-left">
-                    <span className="pixel-text-gold text-2xl">A.</span>
-                    <span className="text-white pixel-text text-xl uppercase">Red Kookaburra</span>
+                    <span className="pixel-text-gold text-3xl">A.</span>
+                    <span className="text-white pixel-text text-2xl uppercase">Red Kookaburra</span>
                   </div>
                 </button>
                 
@@ -105,8 +105,8 @@ export default function Question() {
                 <button className="btn-dark p-3 flex items-center gap-3 w-full rounded-sm group hover:bg-[#3a3a3a]">
                   <div className="w-6 h-6 rounded-full bg-gray-100 border-2 border-black flex-shrink-0 shadow-[inset_-2px_-2px_0_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform"></div>
                   <div className="flex items-baseline gap-2 text-left">
-                    <span className="pixel-text-gold text-2xl">B.</span>
-                    <span className="text-white pixel-text text-xl uppercase">White Dukes</span>
+                    <span className="pixel-text-gold text-3xl">B.</span>
+                    <span className="text-white pixel-text text-2xl uppercase">White Dukes</span>
                   </div>
                 </button>
                 
@@ -114,8 +114,8 @@ export default function Question() {
                 <button className="btn-dark p-3 flex items-center gap-3 w-full rounded-sm group hover:bg-[#3a3a3a]">
                   <div className="w-6 h-6 rounded-full bg-pink-500 border-2 border-black flex-shrink-0 shadow-[inset_-2px_-2px_0_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform"></div>
                   <div className="flex items-baseline gap-2 text-left">
-                    <span className="pixel-text-gold text-2xl">C.</span>
-                    <span className="text-white pixel-text text-xl uppercase">Pink S.G.</span>
+                    <span className="pixel-text-gold text-3xl">C.</span>
+                    <span className="text-white pixel-text text-2xl uppercase">Pink S.G.</span>
                   </div>
                 </button>
                 
@@ -125,8 +125,8 @@ export default function Question() {
                     <div className="w-full h-full opacity-50 bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,#fff_2px,#fff_4px)]"></div>
                   </div>
                   <div className="flex items-baseline gap-2 text-left">
-                    <span className="pixel-text-gold text-2xl">D.</span>
-                    <span className="text-white pixel-text text-xl uppercase">Other</span>
+                    <span className="pixel-text-gold text-3xl">D.</span>
+                    <span className="text-white pixel-text text-2xl uppercase">Other</span>
                   </div>
                 </button>
               </div>
@@ -149,10 +149,10 @@ export default function Question() {
               
               {/* Player ID Input Area */}
               <div className="relative z-20 flex items-center gap-3 bg-[#2a302a] px-4 py-2 border-4 border-black rounded-sm shadow-[inset_0_0_0_2px_#555]">
-                <label className="text-white pixel-text text-2xl uppercase tracking-wider" htmlFor="player-id">Player ID:</label>
+                <label className="text-white pixel-text text-3xl uppercase tracking-wider" htmlFor="player-id">Player ID:</label>
                 <input 
                   aria-label="Player ID" 
-                  className="pixel-input w-16 h-8 text-center text-xl font-bold rounded-sm" 
+                  className="pixel-input w-20 h-10 text-center text-2xl font-bold rounded-sm" 
                   id="player-id" 
                   maxLength={3} 
                   type="text" 
