@@ -13,7 +13,7 @@ export default function Question() {
       </Head>
       
       <div 
-        className="w-screen h-screen flex items-center justify-center relative bg-gray-900 overflow-hidden select-none"
+        className="w-screen min-h-screen flex items-center justify-center relative bg-gray-900 overflow-x-hidden overflow-y-auto select-none py-8 lg:py-0"
         style={{ fontFamily: "'VT323', monospace" }}
       >
         {/* BEGIN: Background Layer */}
@@ -43,9 +43,12 @@ export default function Question() {
         {/* END: Animated Confetti Overlay */}
         
         {/* BEGIN: Main UI Container */}
-        <main className="relative z-20 w-[90%] md:w-[65%] max-w-4xl h-auto min-h-[500px] flex flex-col items-center justify-center">
-          {/* BEGIN: Glass Panel */}
-          <div className="glass-panel w-full h-full p-4 md:p-8 flex flex-col relative rounded-sm">
+        <div className="relative z-20 w-[95%] max-w-7xl h-auto min-h-[500px] flex flex-col lg:flex-row items-stretch justify-center gap-6 lg:mt-0 mt-8 mb-8 lg:mb-0">
+          
+          {/* BEGIN: Main Question Panel (LEFT/CENTER) */}
+          <main className="w-full lg:w-[65%] flex flex-col justify-center">
+            {/* BEGIN: Glass Panel */}
+            <div className="glass-panel w-full h-full p-4 md:p-8 flex flex-col relative rounded-sm">
             {/* Top Left/Right Flags Decoration */}
             <div className="absolute -top-8 left-4 flex gap-1 transform -rotate-12">
               <div className="w-6 h-8 bg-orange-500 border-2 border-black border-b-0"></div>
@@ -163,8 +166,88 @@ export default function Question() {
             </footer>
             {/* END: Footer Framing */}
           </div>
-          {/* END: Glass Panel */}
-        </main>
+            {/* END: Glass Panel */}
+          </main>
+          {/* END: Main Question Panel */}
+
+          {/* BEGIN: AI Thinking Log Panel (RIGHT) */}
+          <aside className="w-full lg:w-[35%] flex flex-col">
+            <div className="glass-panel w-full h-full p-4 md:p-6 flex flex-col relative rounded-sm bg-black/70 border-gray-400">
+              
+              {/* Top Corners Decor */}
+              <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-yellow-400 z-10"></div>
+              <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-yellow-400 z-10"></div>
+              <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-yellow-400 z-10"></div>
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-yellow-400 z-10"></div>
+
+              {/* Panel Header */}
+              <header className="text-center mb-4 pb-2 border-b-4 border-gray-600 relative mt-2">
+                <h2 className="text-yellow-400 pixel-text text-3xl md:text-4xl uppercase tracking-widest pulse-text">
+                  AI THINKING LOG
+                </h2>
+                {/* Blinking indicator */}
+                <div className="absolute top-1/2 right-2 -translate-y-1/2 w-3 h-3 bg-red-500 rounded-full border-2 border-black animate-ping"></div>
+              </header>
+
+              {/* Live Status Stats */}
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="bg-[#1a201a] border-2 border-black p-2 flex flex-col items-center justify-center text-center shadow-[inset_0_0_0_1px_#333]">
+                  <span className="text-gray-400 text-sm md:text-base uppercase">Question</span>
+                  <span className="text-white text-3xl pixel-text">4/8</span>
+                </div>
+                <div className="bg-[#1a201a] border-2 border-black p-2 flex flex-col items-center justify-center text-center shadow-[inset_0_0_0_1px_#333]">
+                  <span className="text-gray-400 text-sm md:text-base uppercase">Confidence</span>
+                  <span className="text-green-400 text-3xl pixel-text">82%</span>
+                </div>
+                <div className="bg-[#1a201a] border-2 border-black p-2 flex flex-col items-center justify-center text-center shadow-[inset_0_0_0_1px_#333]">
+                  <span className="text-gray-400 text-sm md:text-base uppercase">Players Left</span>
+                  <span className="text-yellow-400 text-3xl pixel-text">17</span>
+                </div>
+                <div className="bg-[#1a201a] border-2 border-black p-2 flex flex-col items-center justify-center text-center shadow-[inset_0_0_0_1px_#333]">
+                  <span className="text-gray-400 text-sm md:text-base uppercase">AI Status</span>
+                  <span className="text-blue-400 text-xl md:text-2xl pixel-text animate-pulse">ANALYZING</span>
+                </div>
+              </div>
+
+              {/* Scrolling Logs */}
+              <div className="flex-grow bg-[#0a0a0a] border-4 border-black p-3 mb-4 rounded-sm shadow-[inset_0_0_0_2px_#333] overflow-hidden relative min-h-[160px] md:min-h-[200px]">
+                <ul className="space-y-2 text-lg md:text-xl text-green-400 opacity-90 font-mono tracking-tight flex flex-col justify-end h-full">
+                  <li className="animate-fade-in" style={{ animationDelay: '0.2s' }}>&gt; Filtering batting profiles...</li>
+                  <li className="animate-fade-in" style={{ animationDelay: '0.6s' }}>&gt; Captaincy traits detected...</li>
+                  <li className="animate-fade-in" style={{ animationDelay: '1.0s' }}>&gt; Confidence increasing...</li>
+                  <li className="animate-fade-in" style={{ animationDelay: '1.4s' }}>&gt; Overseas candidates removed...</li>
+                  <li className="animate-fade-in" style={{ animationDelay: '1.8s' }}>&gt; Strike-rate cluster matched...</li>
+                  <li className="animate-fade-in text-white" style={{ animationDelay: '2.2s' }}>&gt; Final pool narrowing...</li>
+                  <li className="mt-2 text-yellow-400 typewriter" style={{ width: 'fit-content', animationDelay: '2.5s' }}>_</li>
+                </ul>
+              </div>
+
+              {/* Top Candidates */}
+              <div className="bg-[#1a201a] border-4 border-black p-3 shadow-[inset_0_0_0_2px_#333] mt-auto">
+                <h3 className="text-gray-400 border-b-2 border-gray-700 pb-1 mb-2 text-xl md:text-2xl uppercase tracking-wider text-center pixel-text">
+                  TOP CANDIDATES
+                </h3>
+                <ul className="space-y-2">
+                  <li className="flex justify-between items-center text-xl md:text-2xl hover:bg-gray-800 px-2 py-1 transition-colors group cursor-default">
+                    <span className="text-white pixel-text group-hover:text-yellow-300">1. Virat Kohli</span>
+                    <span className="text-green-400 pixel-text">71%</span>
+                  </li>
+                  <li className="flex justify-between items-center text-xl md:text-2xl hover:bg-gray-800 px-2 py-1 transition-colors group cursor-default">
+                    <span className="text-gray-300 pixel-text group-hover:text-yellow-300">2. Rohit Sharma</span>
+                    <span className="text-yellow-400 pixel-text">18%</span>
+                  </li>
+                  <li className="flex justify-between items-center text-xl md:text-2xl hover:bg-gray-800 px-2 py-1 transition-colors group cursor-default">
+                    <span className="text-gray-400 pixel-text group-hover:text-yellow-300">3. KL Rahul</span>
+                    <span className="text-red-400 pixel-text">06%</span>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </aside>
+          {/* END: AI Thinking Log Panel */}
+
+        </div>
         {/* END: Main UI Container */}
       </div>
     </>

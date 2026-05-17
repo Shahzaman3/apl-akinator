@@ -7,112 +7,86 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Poké-Cricket Masters</title>
+        <title>Cricket Masters</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <div className="h-screen w-screen font-pixel text-white bg-black">
-        {/* BEGIN: Game Container */}
-        <main className="relative w-full h-full crt overflow-hidden bg-retro-sky">
-          {/* Background Image Layer */}
-          <div className="absolute inset-0 z-0">
-            <img
-              alt="Poke-Cricket Masters Background"
-              className="w-full h-full object-cover pixelated opacity-90 blur-[1px]"
-              src="/hero-bg.jpeg"
-            />
-          </div>
+      
+      {/* BEGIN: Game Container */}
+      <main className="relative w-screen h-screen bg-black overflow-hidden font-pixel text-white selection:bg-brand-titleFill selection:text-black">
+        {/* Background Image */}
+        <div className="absolute inset-0 w-full h-full animate-fade-in opacity-0" style={{ animationDelay: '0.2s' }}>
+          <img 
+            alt="Pixel art cricket stadium background" 
+            className="w-full h-full object-cover" 
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5chCnUIDVFarUYl_ZxrZRAYoouF_ImdWB4ngfllbHTni2E2iWYzn_X5bnxomZuw3-0u5edZj-KX8B7Y4IoRNNzKyZH9Hz1hY_9rb0GFHPjIVtD_kjer-gETEa5Zlete6HbysjXZOvqSH2iWlRZ4ZQRMpEperQxA7v_8SRRZwjhGkKNTsyAEL6DsB7b6ldiUZFx2UWXqm1i8eQiCl4bO0hj-x4NoibKs7ufOf5pgJUkcE8-CZCsAAaI0pcwO2lph3baHPpdA-q8qbN"
+          />
+        </div>
+        
+        {/* Overlay Content */}
+        <div className="relative z-10 w-full h-full flex flex-col items-center justify-center py-12 px-4">
           
-          {/* BEGIN: UI Overlay Layer */}
-          <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 md:p-8 pt-12">
+          {/* BEGIN: Header Section */}
+          <header className="flex flex-col items-center w-full animate-fade-in opacity-0 mb-12 md:mb-16 lg:mb-20" style={{ animationDelay: '0.5s' }}>
+            {/* Title */}
+            <h1 aria-label="Cricket Masters" className="text-4xl md:text-5xl lg:text-6xl text-brand-titleFill pixel-text-shadow tracking-tight text-center leading-tight mb-2 drop-shadow-xl">
+              CRICKET<br/>MASTERS
+            </h1>
+            {/* Subtitle */}
+            <div className="bg-black/80 px-4 py-2 border-2 border-white/20 mt-2 shadow-pixel-sm">
+              <p className="text-sm md:text-base text-white tracking-widest uppercase">
+                The Ultimate Cricket Challenge!
+              </p>
+            </div>
+          </header>
+          {/* END: Header Section */}
+          
+          {/* BEGIN: Main Interactive Area */}
+          <section 
+            onClick={() => router.push('/question')}
+            className="relative w-[95%] max-w-5xl h-24 md:h-32 lg:h-40 bg-brand-panelBg border-[6px] border-brand-panelBorder shadow-pixel flex items-center justify-center rounded-sm animate-scale-in opacity-0 cursor-pointer transition-transform hover:scale-105 active:scale-95" 
+            style={{ animationDelay: '0.8s' }}
+          >
+            {/* Corner Decorations (Simulated Pokeballs) */}
+            <div className="absolute -top-6 -left-6 w-12 h-12 bg-white rounded-full border-4 border-black overflow-hidden flex flex-col shadow-pixel-sm z-20">
+              <div className="h-1/2 bg-red-600 border-b-4 border-black w-full"></div>
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white border-4 border-black rounded-full"></div>
+            </div>
+            <div className="absolute -top-6 -right-6 w-12 h-12 bg-white rounded-full border-4 border-black overflow-hidden flex flex-col shadow-pixel-sm z-20">
+              <div className="h-1/2 bg-red-600 border-b-4 border-black w-full"></div>
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white border-4 border-black rounded-full"></div>
+            </div>
+            <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-white rounded-full border-4 border-black overflow-hidden flex flex-col shadow-pixel-sm z-20">
+              <div className="h-1/2 bg-red-600 border-b-4 border-black w-full"></div>
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white border-4 border-black rounded-full"></div>
+            </div>
+            <div className="absolute -bottom-6 -right-6 w-12 h-12 bg-white rounded-full border-4 border-black overflow-hidden flex flex-col shadow-pixel-sm z-20">
+              <div className="h-1/2 bg-red-600 border-b-4 border-black w-full"></div>
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white border-4 border-black rounded-full"></div>
+            </div>
             
-            {/* BEGIN: Header / Logo */}
-            <header className="text-center float relative z-20">
-              {/* Logo Shadow/Border Base */}
-              <div className="inline-block relative">
-                <h1
-                  className="text-4xl md:text-6xl lg:text-7xl text-retro-gold text-outline tracking-wider mb-2"
-                  style={{ WebkitTextStroke: '2px black' }}
-                >
-                  <span className="block mb-2">POKÉ-CRICKET</span>
-                  <span className="block text-retro-red">MASTERS</span>
-                </h1>
-                <p className="text-sm md:text-base lg:text-lg text-white text-outline-sm mt-4">
-                  The Ultimate Cricket Challenge!
-                </p>
-              </div>
-            </header>
-            {/* END: Header / Logo */}
-            
-            {/* BEGIN: Central Game Board */}
-            <section className="flex-1 flex items-center justify-center relative z-20 mt-8 mb-4">
-              {/* Interactive Start Button / Board */}
-              <button 
-                onClick={() => router.push('/question')}
-                className="relative group cursor-pointer hover:scale-105 transition-transform duration-200"
-              >
-                {/* Board Background */}
-                <div className="bg-retro-wood border-4 border-black px-8 py-6 md:px-16 md:py-8 shadow-pixel rounded-sm relative overflow-hidden">
-                  {/* Wooden Texture lines */}
-                  <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMDAwIi8+CjxyZWN0IHdpZHRoPSIzIiBoZWlnaHQ9IjMiIGZpbGw9IiMzMzMiLz4KPC9zdmc+')] pixelated"></div>
-                  <h2 className="text-3xl md:text-5xl text-white text-outline relative z-10">
-                    START GAME
-                  </h2>
-                </div>
-                
-                {/* Decorative Bats (Left/Right) */}
-                <div
-                  className="absolute -left-12 top-1/2 -translate-y-1/2 w-16 h-32 bg-retro-pitch border-4 border-black rotate-[-20deg] rounded-sm hidden md:block"
-                  style={{
-                    borderRadius: '4px 4px 50% 50%',
-                    boxShadow: 'inset -4px 0 0 rgba(0,0,0,0.2)',
-                  }}
-                >
-                  {/* Handle */}
-                  <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-6 h-12 bg-gray-800 border-2 border-black"></div>
-                  {/* Poke detail on bat */}
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-red-500 rounded-full border-2 border-black overflow-hidden flex flex-col">
-                    <div className="h-1/2 w-full bg-red-500 border-b border-black"></div>
-                    <div className="h-1/2 w-full bg-white border-t border-black"></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-2 h-2 bg-white rounded-full border border-black"></div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div
-                  className="absolute -right-12 top-1/2 -translate-y-1/2 w-16 h-32 bg-retro-pitch border-4 border-black rotate-[20deg] rounded-sm hidden md:block"
-                  style={{
-                    borderRadius: '4px 4px 50% 50%',
-                    boxShadow: 'inset -4px 0 0 rgba(0,0,0,0.2)',
-                  }}
-                >
-                  {/* Handle */}
-                  <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-6 h-12 bg-gray-800 border-2 border-black"></div>
-                  {/* Poke detail on bat */}
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-red-500 rounded-full border-2 border-black overflow-hidden flex flex-col">
-                    <div className="h-1/2 w-full bg-red-500 border-b border-black"></div>
-                    <div className="h-1/2 w-full bg-white border-t border-black"></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-2 h-2 bg-white rounded-full border border-black"></div>
-                    </div>
-                  </div>
-                </div>
-              </button>
-            </section>
-            {/* END: Central Game Board */}
-            
-            {/* BEGIN: Footer / Press Start */}
-            <footer className="text-center relative z-20 pb-8">
-              <p className="text-xl md:text-3xl text-retro-gold text-outline pulse-text">
+            {/* Start Button Area */}
+            <div className="relative z-10 w-full h-full flex items-center justify-center">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl text-white pixel-text-shadow tracking-[0.2em] md:tracking-[0.3em] flex gap-4 md:gap-8">
+                <span>START</span>
+                <span>GAME</span>
+              </h2>
+            </div>
+          </section>
+          {/* END: Main Interactive Area */}
+          
+          {/* BEGIN: Footer Prompt */}
+          <footer className="animate-fade-in opacity-0 mt-10 md:mt-14" style={{ animationDelay: '1.2s' }}>
+            <div className="animate-float">
+              <p className="text-xl md:text-3xl text-brand-startText pixel-text-shadow animate-pulse tracking-[0.1em]">
                 PRESS START
               </p>
-            </footer>
-            {/* END: Footer / Press Start */}
-          </div>
-          {/* END: UI Overlay Layer */}
-        </main>
-        {/* END: Game Container */}
-      </div>
+            </div>
+          </footer>
+          {/* END: Footer Prompt */}
+          
+        </div>
+      </main>
+      {/* END: Game Container */}
     </>
   )
 }
