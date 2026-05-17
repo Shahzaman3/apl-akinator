@@ -4,6 +4,7 @@ import GameSession from "../../../../models/GameSession";
 import Player from "../../../../models/Player";
 import { generateIntelligenceReport } from "../../../../lib/gemini";
 import { questionEngine } from "../../../../lib/questionEngine";
+import { fetchPlayerImage } from "../../../../lib/playerImage";
 
 export const dynamic = "force-dynamic";
 
@@ -58,7 +59,10 @@ export async function GET(req: Request) {
       console.log("ResultRoute: Loaded pre-cached intelligence report successfully in 0ms!");
     }
 
-    // 5. Shape the Prediction block containing enriched profile telemetry
+    // 5. Fetch the real player image from Wikipedia (cached after first lookup)
+    const realImageUrl = await fetchPlayerImage(targetPlayer.name);
+
+    // 6. Shape the Prediction block containing enriched profile telemetry
     const predictionBlock = {
       name: targetPlayer.name,
       confidence: session.confidence,
@@ -71,7 +75,7 @@ export async function GET(req: Request) {
       keyStrength: targetPlayer.keyStrength || "Dynamic Impact",
       eraGeneration: targetPlayer.eraGeneration || `Debuted ${targetPlayer.debutYear}`,
       signatureMetric: aiInsight || targetPlayer.signatureMetric,
-      imageUrl: targetPlayer.imageUrl || "https://images.unsplash.com/photo-1531415074968-036ba1b575da?q=80&w=2067&auto=format&fit=crop",
+      imageUrl: realImageUrl,
       sessionId: `#${session._id.toString().slice(-8).toUpperCase()}`,
     };
 
