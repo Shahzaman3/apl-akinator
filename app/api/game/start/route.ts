@@ -31,7 +31,7 @@ export async function POST() {
     });
 
     // 3. Evaluate optimum starting query using initial distribution entropy
-    const initialQuestion = questionEngine.getNextOptimalQuestion(players, probabilitiesMap, []);
+    const initialQuestion = await questionEngine.getNextOptimalQuestion(players, probabilitiesMap, []);
     if (!initialQuestion) {
       return NextResponse.json(
         { error: "Mathematical failure resolving starting distribution split." },
@@ -47,6 +47,7 @@ export async function POST() {
       answers: [],
       confidence: 12, // Starting visual floor
       ended: false,
+      dynamicQuestion: initialQuestion.dynamicQuestionData || undefined,
     });
 
     // 5. Return standard response format

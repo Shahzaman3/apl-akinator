@@ -1,7 +1,7 @@
 /**
  * Represents the binary or soft-weighted input selections available during inference loops.
  */
-export type AnswerType = "YES" | "NO" | "MAYBE";
+export type AnswerType = "YES" | "NO" | "MAYBE" | "DONT_KNOW";
 
 /**
  * Structural definition of an evaluated player-deduction parameter constraint.

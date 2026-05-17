@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { dbConnect } from "../../../../lib/mongodb";
+import { dbConnect, getCachedPlayers } from "../../../../lib/mongodb";
 import GameSession from "../../../../models/GameSession";
 import Player from "../../../../models/Player";
 import { generateIntelligenceReport } from "../../../../lib/gemini";
@@ -23,8 +23,8 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Game session trace missing." }, { status: 404 });
     }
 
-    // 2. Pull overall player pool for distribution sorting
-    const allPlayers = await Player.find({});
+    // 2. Pull overall player pool from in-memory cache (0ms!)
+    const allPlayers = await getCachedPlayers();
     const currentMap = session.playerProbabilities instanceof Map 
       ? session.playerProbabilities 
       : new Map(Object.entries(session.playerProbabilities || {}));
@@ -34,8 +34,10 @@ export async function GET(req: Request) {
     
     let targetPlayer = null;
     if (session.predictedPlayer) {
-      targetPlayer = await Player.findById(session.predictedPlayer);
-    } else if (currentTop.length > 0) {
+      // Find target player instantly from in-memory POJO cache (0ms!)
+      targetPlayer = allPlayers.find((p) => p._id.toString() === session.predictedPlayer.toString()) || null;
+    }
+    if (!targetPlayer && currentTop.length > 0) {
       // Fallback: resolve peak probability candidate
       targetPlayer = currentTop[0].player;
     }
@@ -44,11 +46,17 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Non-convergence: No predictive candidate resolved." }, { status: 404 });
     }
 
-    // 4. Hydrate predictive context using Gemini AI insights
-    const aiInsight = await generateIntelligenceReport(
-      targetPlayer.name,
-      targetPlayer.keyStrength || targetPlayer.role
-    );
+    // 4. Load pre-cached Gemini report from session (0ms!), otherwise fallback to live generation
+    let aiInsight = session.predictedPlayerInsight || null;
+    if (!aiInsight) {
+      console.log("ResultRoute: Pre-cached insight missing. Generating dynamically...");
+      aiInsight = await generateIntelligenceReport(
+        targetPlayer.name,
+        targetPlayer.keyStrength || targetPlayer.role
+      );
+    } else {
+      console.log("ResultRoute: Loaded pre-cached intelligence report successfully in 0ms!");
+    }
 
     // 5. Shape the Prediction block containing enriched profile telemetry
     const predictionBlock = {

@@ -7,7 +7,7 @@
   [![Next.js](https://img.shields.io/badge/Next.js-14.x-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
   [![MongoDB](https://img.shields.io/badge/MongoDB-6.0-green?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
-  [![Docker](https://img.shields.io/badge/Docker-Orchestrated-blue?style=for-the-badge&logo=docker)](https://www.docker.com/)
+
   [![Gemini AI](https://img.shields.io/badge/Google_Gemini-1.5_Flash-orange?style=for-the-badge&logo=google-gemini)](https://aistudio.google.com/)
 
   *A state-of-the-art Akinator-inspired IPL player prediction dashboard, powered by dynamic Bayesian Inference, Shannon Entropy maximization, and Google Gemini Generative AI.*
@@ -48,21 +48,7 @@ The dashboard mirrors actual data science command screens, visualizing condition
 
 ## 🚀 Easy Deployment & Operation
 
-CricIntel supports two main deployment models: one-click orchestrations for container environments, and standard native Node executions.
-
-### 📦 Method 1: Docker Orchestration (Highly Recommended)
-Spin up the complete full-stack environment—including the app server, dedicated database instance, and a visual admin GUI—using a single terminal command:
-
-```bash
-# 1. Start containerized ecosystem in background mode
-docker-compose up -d --build
-```
-*   🌐 **Main Web Application**: `http://localhost:3333`
-*   💾 **Visual Database Explorer (Mongo-Express)**: `http://localhost:8081`
-
----
-
-### 💻 Method 2: Native System Startup
+### 💻 Native System Startup
 
 Ensure a local `mongodb` service is running on port `27017` before initiating.
 
@@ -117,9 +103,7 @@ Upon completing active mathematical deduction trails, CricIntel's result pipelin
 │   ├── gemini.ts         # Google Generative AI pipeline & backup generators
 │   └── mongodb.ts        # Database pooling & high-speed memory cache managers
 ├── models/               # High-fidelity Mongoose schema definitions
-├── data/players.json     # Pre-indexed canonical 251-player reference database
-├── Dockerfile            # Multi-stage Node 18 Alpine Dockerfile
-└── docker-compose.yml    # Multi-tier application orchestrator
+└── data/players.json     # Pre-indexed canonical 251-player reference database
 ```
 
 ---

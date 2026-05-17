@@ -1,8 +1,15 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+export interface IDynamicQuestion {
+  id: number;
+  text: string;
+  subtitle: string;
+  evaluations: Record<string, "YES" | "NO" | "MAYBE">;
+}
+
 export interface IAnswerLog {
   questionId: number;
-  answer: "YES" | "NO" | "MAYBE";
+  answer: "YES" | "NO" | "MAYBE" | "DONT_KNOW";
   filterLog: string;
   reductionLog: string;
 }
@@ -15,6 +22,8 @@ export interface IGameSession extends Document {
   confidence: number;
   ended: boolean;
   predictedPlayer?: mongoose.Types.ObjectId;
+  predictedPlayerInsight?: string;
+  dynamicQuestion?: IDynamicQuestion;
   createdAt: Date;
 }
 
@@ -30,7 +39,7 @@ const GameSessionSchema: Schema = new Schema(
     answers: [
       {
         questionId: { type: Number },
-        answer: { type: String, enum: ["YES", "NO", "MAYBE"] },
+        answer: { type: String, enum: ["YES", "NO", "MAYBE", "DONT_KNOW"] },
         filterLog: { type: String },
         reductionLog: { type: String },
       },
@@ -38,6 +47,13 @@ const GameSessionSchema: Schema = new Schema(
     confidence: { type: Number, default: 10 },
     ended: { type: Boolean, default: false },
     predictedPlayer: { type: Schema.Types.ObjectId, ref: "Player" },
+    predictedPlayerInsight: { type: String },
+    dynamicQuestion: {
+      id: { type: Number },
+      text: { type: String },
+      subtitle: { type: String },
+      evaluations: { type: Map, of: String },
+    },
   },
   { timestamps: true }
 );

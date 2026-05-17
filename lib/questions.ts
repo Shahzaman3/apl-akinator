@@ -8,6 +8,7 @@ export interface IQuestionDef {
   evaluator: (player: IPlayer) => boolean;
   weight: number;
   category: string;
+  dynamicEvaluations?: Record<string, string>;
 }
 
 export const questionsList: IQuestionDef[] = [
