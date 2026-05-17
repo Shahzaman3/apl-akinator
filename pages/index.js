@@ -1,8 +1,26 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { useGameContext } from '../contexts/GameContext'
 
 export default function Home() {
   const router = useRouter()
+  const { startGame } = useGameContext()
+  const [isStarting, setIsStarting] = useState(false)
+
+  const handleStart = async () => {
+    if (isStarting) return;
+    setIsStarting(true);
+    try {
+      await startGame();
+      // Only navigate after data is ready
+      router.push('/question');
+    } catch (error) {
+      console.error('Failed to start game:', error);
+      setIsStarting(false);
+      alert(error.message || 'Failed to connect to AI scout. Please try again.');
+    }
+  }
 
   return (
     <>
@@ -42,8 +60,8 @@ export default function Home() {
 
           {/* BEGIN: Main Interactive Area */}
           <section
-            onClick={() => router.push('/question')}
-            className="relative w-[95%] max-w-5xl h-24 md:h-32 lg:h-40 bg-brand-panelBg border-[6px] border-brand-panelBorder shadow-pixel flex items-center justify-center rounded-sm animate-scale-in opacity-0 cursor-pointer transition-transform hover:scale-105 active:scale-95"
+            onClick={handleStart}
+            className={`relative w-[95%] max-w-5xl h-24 md:h-32 lg:h-40 bg-brand-panelBg border-[6px] border-brand-panelBorder shadow-pixel flex items-center justify-center rounded-sm animate-scale-in opacity-0 cursor-pointer transition-transform hover:scale-105 active:scale-95 ${isStarting ? 'animate-pulse pointer-events-none' : ''}`}
             style={{ animationDelay: '0.8s' }}
           >
             {/* Corner Decorations (Simulated Pokeballs) */}
@@ -66,10 +84,16 @@ export default function Home() {
 
             {/* Start Button Area */}
             <div className="relative z-10 w-full h-full flex items-center justify-center">
-              <h2 className="text-4xl md:text-4xl lg:text-5xl text-white pixel-text-shadow tracking-[0.2em] md:tracking-[0.3em] flex gap-4 md:gap-8">
-                <span>START</span>
-                <span>GAME</span>
-              </h2>
+              {isStarting ? (
+                <h2 className="text-xl md:text-3xl text-yellow-400 pixel-text-shadow tracking-widest animate-pulse">
+                  INITIALIZING AI SCOUT...
+                </h2>
+              ) : (
+                <h2 className="text-4xl md:text-4xl lg:text-5xl text-white pixel-text-shadow tracking-[0.2em] md:tracking-[0.3em] flex gap-4 md:gap-8">
+                  <span>START</span>
+                  <span>GAME</span>
+                </h2>
+              )}
             </div>
           </section>
           {/* END: Main Interactive Area */}
@@ -89,4 +113,9 @@ export default function Home() {
       {/* END: Game Container */}
     </>
   )
+}
+
+// Force server-side rendering to prevent static prerender crash (NextRouter not mounted)
+export async function getServerSideProps() {
+  return { props: {} }
 }

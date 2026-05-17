@@ -40,12 +40,17 @@ module.exports = {
         scaleIn: {
           '0%': { transform: 'scale(0.95)', opacity: '0' },
           '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        flash: {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
         }
       },
       animation: {
         'float': 'float 3s ease-in-out infinite',
         'fade-in': 'fadeIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
         'scale-in': 'scaleIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+        'flash': 'flash 1.5s ease-out forwards',
       }
     }
   },

@@ -8,7 +8,7 @@
 
 body {
   background-color: #000;
-  overflow: hidden; /* Prevent scrolling to act like a game screen */
+  overflow-x: hidden;
   -webkit-user-select: none;
   user-select: none;
   margin: 0;
