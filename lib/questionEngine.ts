@@ -36,26 +36,7 @@ export class QuestionEngine {
 
     console.log(`QuestionEngine: Active player pool size: ${activePlayers.length}`);
 
-    // 2. Strict Gemini questioning on every single turn (Turns 1 to 8)
-    console.log(`QuestionEngine: Turn ${askedQuestionIds.length + 1} - requesting dynamic Gemini question...`);
-    const dynamicResult = await generateDynamicQuestionAndEvaluations(activePlayers);
-    if (dynamicResult && dynamicResult.question && dynamicResult.evaluations) {
-      const nextId = 1000 + askedQuestionIds.length;
-      console.log(`QuestionEngine: Gemini question generated successfully: "${dynamicResult.question}"`);
-      return {
-        id: nextId,
-        text: dynamicResult.question,
-        subtitle: dynamicResult.subtitle,
-        dynamicQuestionData: {
-          id: nextId,
-          text: dynamicResult.question,
-          subtitle: dynamicResult.subtitle,
-          evaluations: dynamicResult.evaluations,
-        },
-      };
-    }
-    console.log("QuestionEngine: Gemini API call failed or timed out. Falling back to Shannon Entropy safety override.");
-
+    // Skip Gemini generation for maximum performance
     // 3. Fallback to Shannon Entropy selection
     const unasked = questionsList.filter((q) => !askedQuestionIds.includes(q.id));
     const selection = getNextBestQuestion(allPlayers, probabilities, unasked);

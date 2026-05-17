@@ -23,25 +23,8 @@ export async function generateIntelligenceReport(
   playerName: string,
   stats: string
 ): Promise<string> {
-  if (!genAI) {
-    return `Telemetry Log: ${playerName} stands as an elite IPL contributor. Key metrics: ${stats}. Strategic role validated.`;
-  }
-
-  try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-    const prompt = `
-      Generate a brief, punchy, 1-sentence Akinator-style "Intelligence Report Summary" 
-      for IPL player ${playerName}. Incorporate their metric: ${stats}. 
-      Keep the tone futuristic, robotic, and analytic. Max 20 words.
-    `;
-
-    const result = await model.generateContent(prompt);
-    const text = result.response.text().trim();
-    return text || `Analyzed: ${playerName} executes dominant strategies with accuracy matching ${stats}.`;
-  } catch (error) {
-    console.error("Gemini generation failed, returning fallback:", error);
-    return `Strategic Log: ${playerName} maintains elite tier performance with notable metrics: ${stats}.`;
-  }
+  // Return instantly for maximum performance without awaiting Gemini API
+  return `Strategic Log: ${playerName} maintains elite tier performance with notable metrics: ${stats}.`;
 }
 
 /**
