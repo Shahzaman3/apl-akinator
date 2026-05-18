@@ -17,7 +17,7 @@
 
 ## 🏏 Hero Overview
 
-**CricIntel** is an elite, analytics-focused visual deduction platform engineered exclusively for Indian Premier League (IPL) enthusiasts. Unlike traditional hardcoded branching tree trivia, CricIntel employs an advanced **Bayesian Probability Engine** that operates on real-time probability distributions across **251 pre-indexed historic and modern IPL players**. 
+**CricIntel** is an elite, analytics-focused visual deduction platform engineered exclusively for Indian Premier League (IPL) enthusiasts. Unlike traditional hardcoded branching tree trivia, CricIntel employs an advanced **Bayesian Probability Engine** that operates on real-time probability distributions across **600 historic and modern IPL players**. 
 
 The dashboard mirrors actual data science command screens, visualizing conditional entropy updates, sequential filtering logs, and instantaneous player pool collapses as the predictive engine isolates the target player in under 8-10 moves.
 
@@ -66,7 +66,7 @@ npm run dev -- -p 3333
 ---
 
 ### 🏏 Critical Last Step: Database Seeding
-When initially installing the repository, the database collection will be empty. CricIntel features a frictionless, one-click browser hydration utility to populate **251 professional players** automatically:
+When initially installing the repository, the database collection will be empty. CricIntel features a frictionless, one-click browser hydration utility to populate **600 professional players** automatically:
 
 👉 Open your browser and navigate once to: **`http://localhost:3333/api/db/seed`**
 
@@ -103,7 +103,7 @@ Upon completing active mathematical deduction trails, CricIntel's result pipelin
 │   ├── gemini.ts         # Google Generative AI pipeline & backup generators
 │   └── mongodb.ts        # Database pooling & high-speed memory cache managers
 ├── models/               # High-fidelity Mongoose schema definitions
-└── data/players.json     # Pre-indexed canonical 251-player reference database
+└── data/players.json     # Pre-indexed canonical 600-player reference database
 ```
 
 ---

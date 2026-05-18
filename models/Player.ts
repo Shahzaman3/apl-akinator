@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface IPlayer extends Document {
   name: string;
+  slug: string;
   country: string;
   role: string;
   battingStyle: string;
@@ -29,6 +30,7 @@ export interface IPlayer extends Document {
 const PlayerSchema: Schema = new Schema(
   {
     name: { type: String, required: true, unique: true, trim: true },
+    slug: { type: String, required: true, unique: true, trim: true },
     country: { type: String, required: true, trim: true },
     role: { type: String, required: true, trim: true },
     battingStyle: { type: String, required: true, trim: true },
