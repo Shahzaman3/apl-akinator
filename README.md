@@ -19,7 +19,7 @@
 
 **CricIntel** is an elite, analytics-focused visual deduction platform engineered exclusively for Indian Premier League (IPL) enthusiasts. Unlike traditional hardcoded branching tree trivia, CricIntel employs an advanced **Bayesian Probability Engine** that operates on real-time probability distributions across **600 historic and modern IPL players**. 
 
-The dashboard mirrors actual data science command screens, visualizing conditional entropy updates, sequential filtering logs, and instantaneous player pool collapses as the predictive engine isolates the target player in under 8-10 moves.
+The dashboard mirrors actual data science command screens, visualizing conditional entropy updates, sequential filtering logs, and instantaneous player pool collapses as the predictive engine isolates the target player through an adaptive number of questions.
 
 ---
 
@@ -28,7 +28,7 @@ The dashboard mirrors actual data science command screens, visualizing condition
 ### 1. Mathematical Deduction Loop
 *   **Shannon Conditional Entropy**: During each cycle, the engine calculates information gains $IG(T, Q) = H(T) - H(T|Q)$ for all unasked questions against active player priors. It dynamically chooses the question offering the maximum theoretical variance split.
 *   **Soft Bayesian Updating**: Answer evaluations incorporate noise tolerance scaling ($YES/NO$ mapped at $0.95/0.05$, $MAYBE$ at $0.60/0.40$), preventing accidental user errors from prematurely collapsing the distribution.
-*   **Immersive Suspense Floor**: A strict, user-mandated minimum floor of **8 questions** ensures a fully paced Akinator-style build-up before offering verified prediction outcomes.
+*   **Confidence-Driven Convergence**: The engine keeps asking questions until prediction confidence crosses the production threshold, then locks the final guess.
 
 ### 2. Performance Supercharging
 *   **RAM static dataset caching**: Static player reference records are loaded from MongoDB into application heap memory on server boot using `.lean()` objects, bypassing expensive disk reads and making calculations virtually **instantaneous (< 0.5ms)**.

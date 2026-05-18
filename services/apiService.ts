@@ -39,7 +39,7 @@ export class ApiService {
           text: data.question.text,
           subtitle: data.question.subtitle,
         },
-        totalQuestions: 8, // Display static metric goal
+        totalQuestions: 0, // Adaptive flow: no fixed cap
         initialPool: data.remainingPlayers,
         initialConfidence: 12,
       };
@@ -48,7 +48,7 @@ export class ApiService {
       // Absolute hardcoded fallback in event of emergency
       return {
         firstQuestion: { id: 1, text: "Is the player Indian?", subtitle: "Verify nationality." },
-        totalQuestions: 8,
+        totalQuestions: 0,
         initialPool: 150,
         initialConfidence: 10,
       };

@@ -6,30 +6,24 @@ export interface IPredictionWeight {
 }
 
 /**
- * Calculates the system's visual confidence using a Relative Separation Heuristic.
- * As the top candidate separates from runner-ups, visual confidence scales to peak.
+ * Calculates confidence using a blended Bayesian certainty model.
+ * Uses top probability, separation from runner-up, and normalized entropy.
  */
 export function calculateConfidence(
   topProbability: number,
   runnerUpProbability: number,
-  questionsAskedCount: number
+  questionsAskedCount: number,
+  normalizedEntropy: number
 ): number {
-  const absoluteBaseline = Math.round(topProbability * 100);
-  
-  // Relative Separation Ratio: how far ahead is #1 compared to #2?
-  let relativeConfidence = 0;
-  if (topProbability > 0.001) {
-    const ratio = 1 - (runnerUpProbability / topProbability);
-    relativeConfidence = Math.round(ratio * 100);
-  }
+  if (topProbability <= 0) return 0;
 
-  // Smoothed visual blending: blend absolute dominance with relative isolation
-  // Favor relative isolation heavily for visual smoothness, bounded by progressive floor
-  const weightedConfidence = Math.max(absoluteBaseline, relativeConfidence * 0.9);
-  const progressiveFloor = Math.max(12 + questionsAskedCount * 3, weightedConfidence);
+  const topPercent = topProbability * 100;
+  const separationBoost = Math.min(15, Math.max(0, (topProbability - runnerUpProbability) * 100 * 0.45));
+  const entropyBoost = Math.max(0, (1 - normalizedEntropy) * 12);
+  const evidenceBoost = Math.min(8, questionsAskedCount) * 0.6;
 
-  // Constrain boundaries to guarantee a satisfying visual progression
-  return Math.min(98, Math.round(progressiveFloor));
+  const blended = topPercent * 0.75 + separationBoost + entropyBoost + evidenceBoost;
+  return Math.max(0, Math.min(99, Math.round(blended)));
 }
 
 /**

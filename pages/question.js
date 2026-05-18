@@ -225,11 +225,11 @@ export default function Question() {
               <div className={`grid grid-cols-2 gap-2 mb-2 transition-transform ${isFlashing ? 'scale-105' : 'scale-100'}`}>
                 <div className="bg-[#1a201a] border-2 border-black p-2 flex flex-col items-center justify-center text-center shadow-[inset_0_0_0_1px_#333]">
                   <span className="text-gray-400 text-sm md:text-base uppercase">Question</span>
-                  <span className="text-white text-3xl pixel-text">{questionNumber}/8</span>
+                  <span className="text-white text-3xl pixel-text">{questionNumber}</span>
                 </div>
                 <div className="bg-[#1a201a] border-2 border-black p-2 flex flex-col items-center justify-center text-center shadow-[inset_0_0_0_1px_#333]">
                   <span className="text-gray-400 text-sm md:text-base uppercase">Confidence</span>
-                  <span className={`${confidence >= 80 ? 'text-green-400 animate-pulse' : 'text-green-400'} text-3xl pixel-text`}>
+                  <span className={`${confidence >= 75 ? 'text-green-400 animate-pulse' : 'text-green-400'} text-3xl pixel-text`}>
                     {Math.round(confidence)}%
                   </span>
                 </div>

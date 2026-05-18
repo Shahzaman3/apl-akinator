@@ -4,16 +4,18 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useGameContext } from '../contexts/GameContext'
 import { getResult } from '../services/gameApi'
+import { startGame } from '../services/gameApi'
 
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1531415074968-036ba1b575da?q=80&w=2067&auto=format&fit=crop";
 
 export default function Result() {
   const router = useRouter()
-  const { gameId, questionNumber, clearGameSession } = useGameContext()
+  const { gameId, clearGameSession, startGame } = useGameContext()
   const [resultData, setResultData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const [isImageReady, setIsImageReady] = useState(false)
+  const [isStarting, setIsStarting] = useState(false)
 
   useEffect(() => {
     if (!gameId) {
@@ -56,7 +58,20 @@ export default function Result() {
     fetchResult();
   }, [gameId, router]);
 
-  const handleNewMatch = () => {
+  const handleNewMatch = async () => {
+    setIsStarting(true);
+    clearGameSession();
+    try {
+      await startGame();
+      router.push('/question');
+    } catch (error) {
+      console.error('Failed to start game:', error);
+      setIsStarting(false);
+      alert(error.message || 'Failed to connect to AI scout. Please try again.');
+    }
+  }
+
+  const handleHome = () => {
     clearGameSession();
     router.push('/');
   }
@@ -157,7 +172,7 @@ export default function Result() {
                   <div className="wooden-board p-4 text-center">
                     <h2 className="text-yellow-400 text-3xl mb-2 pixel-text">FINAL CONFIDENCE</h2>
                     <div className="text-5xl text-white font-bold pixel-text animate-bounce mt-2 animate-victory uppercase">
-                      {resultData.confidence >= 90 ? 'LEGENDARY' : resultData.confidence >= 80 ? 'HIGH' : 'MEDIUM'}
+                      {resultData.confidence >= 90 ? 'LEGENDARY' : resultData.confidence >= 75 ? 'HIGH' : 'MEDIUM'}
                     </div>
                     <div className="mt-4 inline-block bg-black/50 text-white px-4 py-1 text-xl border-2 border-black">
                       MATCH COMPLETE
@@ -180,7 +195,7 @@ export default function Result() {
               {/* Action Buttons */}
               <div className="mt-8 flex flex-wrap justify-center gap-4 border-t-4 border-gray-400 pt-6">
                 <button onClick={handleNewMatch} className="retro-button px-6 py-3 text-2xl font-bold">PLAY AGAIN</button>
-                <button onClick={handleNewMatch} className="retro-button px-6 py-3 text-2xl font-bold bg-blue-400">NEW MATCH</button>
+                <button onClick={handleHome} className="retro-button px-6 py-3 text-2xl font-bold bg-blue-400">HOME</button>
               </div>
             </div>
             {/* END: Main Panel */}

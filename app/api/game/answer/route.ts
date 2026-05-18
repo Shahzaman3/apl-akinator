@@ -58,15 +58,14 @@ export async function POST(req: Request) {
     const questionsAnsweredCount = session.answers.length;
     const newConfidence = questionEngine.calculateTelemetry(updatedProbabilities, questionsAnsweredCount);
 
-    // 5. Assess Convergence Conditions
+    // 5. Assess convergence conditions
     const currentTop = questionEngine.deriveLikelyCandidates(allPlayers, updatedProbabilities, 5);
-    const peakProb = currentTop.length > 0 ? (currentTop[0].probability / 100) : 0;
-    
-    // STRICT CONVERGENCE RULES:
-    // - Immediately terminate if peak confidence >= 80%
-    // - Immediately terminate if answered questions reaches 8 (the hard cap)
-    // - Terminate if candidate pool is completely isolated (activeCount <= 1)
-    let isComplete = peakProb >= 0.80 || questionsAnsweredCount >= 8 || activeCount <= 1;
+    const GUESS_CONFIDENCE_THRESHOLD = 75;
+
+    // Confidence-driven completion:
+    // - Guess when confidence reaches threshold
+    // - Or when candidate pool is isolated
+    let isComplete = newConfidence >= GUESS_CONFIDENCE_THRESHOLD || activeCount <= 1;
     let nextQuestion = null;
 
     if (!isComplete) {

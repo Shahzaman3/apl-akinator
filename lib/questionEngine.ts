@@ -116,8 +116,15 @@ export class QuestionEngine {
     
     const peak = sorted.length > 0 ? sorted[0] : 0;
     const runnerUp = sorted.length > 1 ? sorted[1] : 0;
+    const nonZero = sorted.filter((p) => p > 1e-12);
+    const entropy =
+      nonZero.length > 0
+        ? -nonZero.reduce((acc, p) => acc + p * Math.log2(p), 0)
+        : 0;
+    const maxEntropy = nonZero.length > 1 ? Math.log2(nonZero.length) : 1;
+    const normalizedEntropy = Math.min(1, Math.max(0, entropy / maxEntropy));
 
-    return calculateConfidence(peak, runnerUp, questionsAskedCount);
+    return calculateConfidence(peak, runnerUp, questionsAskedCount, normalizedEntropy);
   }
 
   /**
